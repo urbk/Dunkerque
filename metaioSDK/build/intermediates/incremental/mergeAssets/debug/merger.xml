@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="D:\Dunkerque2\metaioSDK\assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="D:\Dunkerque2\metaioSDK\build-types\debug\assets" />
+    </dataSet>
+
+</merger>

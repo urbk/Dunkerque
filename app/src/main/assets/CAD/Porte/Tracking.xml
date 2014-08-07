@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrackingData>
+    <Sensors>
+        <Sensor Type="EdgeBasedInitializationSensorSource">
+            <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+            <Parameters>
+                <TriangleMesh>SurfaceModel.obj</TriangleMesh>
+                <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
+                <UseSensorsForPoseCreation>off</UseSensorsForPoseCreation>
+                <InitializationTestMode>false</InitializationTestMode>
+                <AutoInit>
+                    <PresetType>outdoor</PresetType>
+                </AutoInit>
+                <EdgeAlignment>
+                    <LineModel>LineModel.obj</LineModel>
+                    <MinQuality>0.55</MinQuality>
+                    <SearchRange>2500.0</SearchRange>
+                    <VisibilityTest>
+                        <TestRate>0.1000000015</TestRate>
+                        <Enabled>false</Enabled>
+                    </VisibilityTest>
+                    <NumFeatures>350</NumFeatures>
+                </EdgeAlignment>
+                <FeatureTracking>
+                    <Parameters>
+                        <MapExtensionMethod>wide</MapExtensionMethod>
+                        <NumExtensibleFeatures>4500</NumExtensibleFeatures>
+                    </Parameters>
+                    <FeatureOrientationAssignment>regular</FeatureOrientationAssignment>
+                </FeatureTracking>
+            </Parameters>
+            <SensorCOS>
+                <SensorCosID>TrackingPose</SensorCosID>
+            </SensorCOS>
+            <SensorCOS>
+                <SensorCosID>InitialPose</SensorCosID>
+            </SensorCOS>
+        </Sensor>
+    </Sensors>
+    <Connections>
+        <COS>
+            <Name>TrackingPose</Name>
+            <SensorSource>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>TrackingPose</SensorCosID>
+            </SensorSource>
+        </COS>
+        <COS>
+            <Name>InitialPose</Name>
+            <SensorSource>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>InitialPose</SensorCosID>
+            </SensorSource>
+        </COS>
+    </Connections>
+</TrackingData>

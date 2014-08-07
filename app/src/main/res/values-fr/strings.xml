@@ -1,0 +1,16 @@
+<resources>
+
+    <string name="ScreenshotFail">Oops ! Capture d\'écran impossible</string>
+    <string name="ScreenshotSuccess">Photo sauvegardée</string>
+    <string name="b_home_1">Démarrer</string>
+    <string name="b_home_2">Aide</string>
+    <string name="cantReadFile">Oops ! Impossible de lire le contneu</string>
+    <string name="close">Quitter</string>
+    <string name="downloadContent">Chargement des données</string>
+    <string name="downloadError">Oops ! Impossible de charger les données</string>
+    <string name="fileNotFound">Oops ! Fichier inéxistant</string>
+    <string name="noNetworkAvailable">Aucun réseau à portée essayez près d\'un panneau !</string>
+    <string name="onWifiActivation">Wi-Fi activé</string>
+    <string name="screenshot">Prendre une photo</string>
+
+</resources>

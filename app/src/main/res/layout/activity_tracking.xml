@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/trackingLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+
+    <VideoView
+    android:id="@+id/videoview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" />
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+      >
+        <!--android:visibility="gone"-->
+        <ImageButton
+            android:id="@+id/audioContent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/audio"
+            android:background="@drawable/round_corner"
+            android:src="@drawable/ic_audio"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onContentSelect" />
+
+        <ImageButton
+            android:id="@+id/videoContent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/video"
+            android:layout_gravity="bottom"
+            android:background="@drawable/round_corner"
+            android:src="@drawable/ic_video"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onContentSelect" />
+
+        <ImageButton
+            android:id="@+id/threeDContent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/threeDcontent"
+            android:layout_gravity="bottom"
+            android:background="@drawable/round_corner"
+            android:src="@drawable/ic_3d"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onContentSelect" />
+        <ImageButton
+            android:id="@+id/trackCadSandettie"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/threeDcontent"
+            android:layout_gravity="bottom"
+            android:background="@drawable/round_corner"
+            android:src="@drawable/ic_track"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onContentSelect" />
+    </LinearLayout>
+
+
+
+        <ImageButton
+            android:id="@+id/crossSection"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/threeDcontent"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@drawable/round_corner"
+            android:src="@drawable/ic_coupe"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="onContentSelect"
+            android:visibility="gone"/>
+    <ImageButton
+        android:id="@+id/resetCad"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:contentDescription="@string/threeDcontent"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/round_corner"
+        android:src="@drawable/ic_reset"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="onContentSelect"
+        android:visibility="gone"
+       />
+
+
+</FrameLayout>
+    <!--remettre FrameLayout si marche pas avec merge-->
+

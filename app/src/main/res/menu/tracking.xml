@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Acceuil" >
+    <item
+        android:id="@+id/menu_screenshot"
+        android:icon="@drawable/ic_screenshot"
+        android:showAsAction="ifRoom"
+        android:title="@string/screenshot"
+        />
+    <item
+        android:id="@+id/menu_help"
+        android:icon="@drawable/ic_help"
+        android:showAsAction="ifRoom"
+        android:title="@string/screenshot"
+        />
+    <item
+        android:id="@+id/menu_reglage"
+        android:icon="@drawable/ic_options"
+        android:showAsAction="ifRoom"
+        android:title="@string/screenshot"
+        />
+
+</menu>

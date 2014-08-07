@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Port</string>
+    <string name="b_home_1">Let\'s track !</string>
+    <string name="b_home_2">Help</string>
+    <string name="b_home_3">Options</string>
+    <string name="action_settings">Settings</string>
+    <string name="close">Exit</string>
+    <string name="title_activity_tracking">tracking</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="metaioSDKSignature">Gf2uVOYegCqGXL1xYvEYYQri6vbhux9mJbQLZ28Rl88=</string>
+    <string name="screenshot">take a screenshot</string>
+    <string name="ScreenshotSuccess">Picture saved !</string>
+    <string name="ScreenshotFail">Oops ! Unable to save your screenshot</string>
+    <string name="onSharing">Share to</string>
+    <string name="onWifiActivation">Wi-Fi enabled</string>
+    <string name="noNetworkAvailable">Network unreachable , come closer !</string>
+    <string name="onConnection">connected, let\'s track !</string>
+    <string name="downloadContent">Loading data</string>
+    <string name="fileNotFound">Oops ! File not found &#8230;</string>
+    <string name="cantReadFile">Oops ! Unable to read content &#8230;</string>
+    <string name="downloadError">Oops ! Unable to download content &#8230;</string>
+    <string name="onDownloadSuccess">Content downloaded</string>
+
+    <!--*********************TRACKING CONTENT OPTIONS***********************-->
+    <string name="video">Video</string>
+    <string name="audio">Audio</string>
+    <string name="animations">Animations</string>
+    <string name="threeDcontent">3D content</string>
+    <string name="geoloc">Geolocalisation</string>
+
+    <!--****************************ACCUEIL********************************-->
+    <string name="wifi">Connexion to Wi-Fi</string>
+    <string name="loading">Loading data           </string>
+    <string name="decompress">Finalization             </string>
+
+
+</resources>

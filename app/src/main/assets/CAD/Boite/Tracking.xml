@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrackingData>
+    <Sensors>
+        <Sensor Type="EdgeBasedInitializationSensorSource">
+            <SensorID>BoiteCAD</SensorID>
+            <Parameters>
+                <TriangleMesh>SurfaceModel.obj</TriangleMesh>
+                <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
+                <UseSensorsForPoseCreation>off</UseSensorsForPoseCreation>
+                <InitializationTestMode>false</InitializationTestMode>
+                <AutoInit>
+                    <PresetType>outdoor</PresetType>
+                </AutoInit>
+                <EdgeAlignment>
+                    <LineModel>LineModel.obj</LineModel>
+                    <MinQuality>0.55</MinQuality>
+                    <SearchRange>1500.0</SearchRange>
+                    <VisibilityTest>
+                        <TestRate>0.1000000015</TestRate>
+                        <Enabled>false</Enabled>
+                    </VisibilityTest>
+                    <NumFeatures>200</NumFeatures>
+                </EdgeAlignment>
+                <FeatureTracking>
+                    <Parameters>
+                        <MapExtensionMethod>narrow</MapExtensionMethod>
+                        <NumExtensibleFeatures>3000</NumExtensibleFeatures>
+                    </Parameters>
+                    <FeatureOrientationAssignment>regular</FeatureOrientationAssignment>
+                </FeatureTracking>
+            </Parameters>
+            <SensorCOS>
+                <SensorCosID>TrackingPoseBoite</SensorCosID>
+            </SensorCOS>
+            <SensorCOS>
+                <SensorCosID>InitialPoseBoite</SensorCosID>
+            </SensorCOS>
+        </Sensor>
+    </Sensors>
+    <Connections>
+        <COS>
+            <Name>TrackingPoseBoite</Name>
+            <SensorSource>
+                <SensorID>BoiteCAD</SensorID>
+                <SensorCosID>TrackingPoseBoite</SensorCosID>
+            </SensorSource>
+        </COS>
+        <COS>
+            <Name>InitialPoseBoite</Name>
+            <SensorSource>
+                <SensorID>BoiteCAD</SensorID>
+                <SensorCosID>InitialPoseBoite</SensorCosID>
+            </SensorSource>
+        </COS>
+    </Connections>
+</TrackingData>
