@@ -30,8 +30,8 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
     private boolean isConnected = false;
     private final ImageView mImageView;
     private final Animation animRotate;
-    public AsyncWifiConnect(Activity context) {
 
+    public AsyncWifiConnect(Activity context) {
         this.mContext = context;
         manager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         this.wconf = new WifiConfiguration();
@@ -93,7 +93,6 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
                             }
                             if (getWifiStrength() > 79)
                                 isConnected = true;
-
                         }
                     }
                 }
