@@ -2,24 +2,23 @@
 <TrackingData>
     <Sensors>
         <Sensor Type="EdgeBasedInitializationSensorSource">
-            <SensorID>SandettieCAD</SensorID>
+            <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
             <Parameters>
                 <TriangleMesh>SurfaceModel.obj</TriangleMesh>
                 <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
                 <UseSensorsForPoseCreation>off</UseSensorsForPoseCreation>
                 <InitializationTestMode>false</InitializationTestMode>
                 <AutoInit>
-                    <PresetType>outdoor</PresetType>
+                    <PresetType>off</PresetType>
                 </AutoInit>
                 <EdgeAlignment>
                     <LineModel>LineModel.obj</LineModel>
-                    <MinQuality>0.65</MinQuality>
-                    <SearchRange>1500.0</SearchRange>
+                    <MinQuality>0.55</MinQuality>
                     <VisibilityTest>
                         <TestRate>0.1000000015</TestRate>
                         <Enabled>false</Enabled>
                     </VisibilityTest>
-                    <NumFeatures>200</NumFeatures>
+                    <NumFeatures>80</NumFeatures>
                 </EdgeAlignment>
                 <FeatureTracking>
                     <Parameters>
@@ -30,26 +29,26 @@
                 </FeatureTracking>
             </Parameters>
             <SensorCOS>
-                <SensorCosID>TrackingPoseSandettie</SensorCosID>
+                <SensorCosID>TrackingPose</SensorCosID>
             </SensorCOS>
             <SensorCOS>
-                <SensorCosID>InitialPoseSandettie</SensorCosID>
+                <SensorCosID>InitialPose</SensorCosID>
             </SensorCOS>
         </Sensor>
     </Sensors>
     <Connections>
         <COS>
-            <Name>TrackingPoseSandettie</Name>
+            <Name>TrackingPose</Name>
             <SensorSource>
-                <SensorID>SandettieCAD</SensorID>
-                <SensorCosID>TrackingPoseSandettie</SensorCosID>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>TrackingPose</SensorCosID>
             </SensorSource>
         </COS>
         <COS>
-            <Name>InitialPoseSandettie</Name>
+            <Name>InitialPose</Name>
             <SensorSource>
-                <SensorID>SandettieCAD</SensorID>
-                <SensorCosID>InitialPoseSandettie</SensorCosID>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>InitialPose</SensorCosID>
             </SensorSource>
         </COS>
     </Connections>

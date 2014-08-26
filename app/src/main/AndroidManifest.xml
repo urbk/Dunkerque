@@ -25,23 +25,22 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Tracking"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
+        <activity android:name=".SplashScreen" />
 
-
-        <receiver
-            android:name="wifiConnect.WifiReceiver"
-            android:label="wifiConnect.WifiReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:enabled="true"-->
+            <!--android:name="wifiConnect.WifiReceiver"-->
+            <!--android:label="wifiConnect.WifiReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.net.wifi.WifiManager.RSSI_CHANGED_ACTION" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
     </application>
 
 </manifest>

@@ -16,12 +16,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.ETRACKING_STATE;
@@ -40,9 +38,8 @@ import utils.Utils;
 import wifiConnect.AsyncWifiConnect;
 import wifiConnect.ContentLoader;
 
-import static utils.Utils.getMiddleScreenCoordonates;
 
-public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedListener, View.OnTouchListener {
+public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedListener, View.OnLongClickListener, View.OnTouchListener {
     private MetaioSDKCallbackHandler mCallbackHandler;
     private ContentType ct = ContentType.None;
     private final MediaPlayer mMediaPlayer = new MediaPlayer();
@@ -53,11 +50,11 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
     private static String PATH_TO_IMAGE_TRACKING_CONF;
     private static String PATH_TO_CAD_TRACKING_CONF;
     private final Vector3d v3d = new Vector3d(0.0f, 0.0f, 0.0f);
-    //    Vector3d v3dGeo = new Vector3d(0.0f, 0.0f, 0.0f);
-//    private LinearLayout mLinearLayoutLLA, mLinearLayoutLLA2, mLinearLayoutLLA3;
-    private Animation animBounce;
+    private Animation animBounce, animFadeIn, animFadeOut;
     private LinearLayout contentL;
-    private ImageButton contentL2, cadReset;
+    private ImageButton contentL2, cadReset, mImageButton = null, arrowLeft, arrowRight, arrowUp, arrowDown;
+    private float fingerX, fingerY;
+
 
     private enum EState {
         NOTTRACKING,
@@ -78,12 +75,18 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracking);
         mCallbackHandler = new MetaioSDKCallbackHandler();
-        FrameLayout mFrameLayout = (FrameLayout) findViewById(R.id.trackingLayout);
-        mFrameLayout.setOnTouchListener(this);
+        mGUIView.setOnTouchListener(this);
+        mGUIView.setOnLongClickListener(this);
         PATH_TO_IMAGE_TRACKING_CONF = AssetsManager.getAbsolutePath() + "/Img/TrackingData_MarkerlessFast.xml";
-        PATH_TO_CAD_TRACKING_CONF = AssetsManager.getAbsolutePath() + "/CAD/Boite/Tracking.xml";
+        PATH_TO_CAD_TRACKING_CONF ="";
         animBounce = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.bounce);
+        animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade_in);
+        animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade_out);
+
+
     }
 
     @Override
@@ -111,7 +114,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         super.onDestroy();
         mCallbackHandler.delete();
         mCallbackHandler = null;
-        File contentFolder = new File(ContentLoader.getPathOfFolder());
+        File contentFolder = new File(ContentLoader.ROOT_INTERNAL);
         Utils.deleteDir(contentFolder);
     }
 
@@ -131,59 +134,168 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        if (currentContentModel.getTargetName().equals("Duchesse") && mState == EState.TRACKING) {
+            mImageButton = (ImageButton) findViewById(R.id.rotateModel);
+            arrowUp = (ImageButton) findViewById(R.id.arrow_up);
+            arrowDown = (ImageButton) findViewById(R.id.arrow_down);
+            arrowLeft = (ImageButton) findViewById(R.id.arrow_left);
+            arrowRight = (ImageButton) findViewById(R.id.arrow_right);
+            float xOffset = 42;
+            float yOffset = 39;
+            Log.e("Offset", xOffset + " y :" + yOffset);
+            fingerX = fingerX - xOffset;
+            fingerY = fingerY - yOffset;
+            mImageButton.setX(fingerX);
+            mImageButton.setY(fingerY);
+
+            arrowUp.setX(fingerX);
+            arrowUp.setY(fingerY - 70);
+            arrowDown.setX(fingerX);
+            arrowDown.setY(fingerY + 70);
+            arrowLeft.setX(fingerX - 70);
+            arrowLeft.setY(fingerY);
+            arrowRight.setX(fingerX + 70);
+            arrowRight.setY(fingerY);
+            mImageButton.setAnimation(animFadeIn);
+            arrowRight.setAnimation(animFadeIn);
+            arrowLeft.setAnimation(animFadeIn);
+            arrowDown.setAnimation(animFadeIn);
+            arrowUp.setAnimation(animFadeIn);
+            mImageButton.startAnimation(animFadeIn);
+            arrowRight.startAnimation(animFadeIn);
+            arrowLeft.startAnimation(animFadeIn);
+            arrowDown.startAnimation(animFadeIn);
+            arrowUp.startAnimation(animFadeIn);
+            arrowRight.setImageResource(R.drawable.ic_arrow_right);
+            arrowLeft.setImageResource(R.drawable.ic_arrow_left);
+            arrowUp.setImageResource(R.drawable.ic_arrow_up);
+            arrowDown.setImageResource(R.drawable.ic_arrow_down);
+            if (mImageButton.getVisibility() != View.VISIBLE) {
+                mImageButton.setVisibility(View.VISIBLE);
+                arrowRight.setVisibility(View.VISIBLE);
+                arrowLeft.setVisibility(View.VISIBLE);
+                arrowDown.setVisibility(View.VISIBLE);
+                arrowUp.setVisibility(View.VISIBLE);
+            }
+        }
+        return true;
+    }
 
     //
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
         ContentModel mTempContentModel = mContentModel.get(indexCurrentModel);
         IGeometry mTempModel = mTempContentModel.getModel();
-
-        float midCoordonates[];
-        midCoordonates = getMiddleScreenCoordonates(this);
-        switch (action) {
-            case MotionEvent.ACTION_MOVE:
-                if (mTempContentModel.getContentType() == ContentType.Movable) {
-                    if (event.getX() > midCoordonates[0]) {
-//                ROTATE ON MODEL Y AXE
-                        if (event.getY() < midCoordonates[1]) {
-                            v3d.setX(0.0f);
-                            v3d.setY(0.01f);
-                        } else {
-                            v3d.setX(0.0f);
-                            v3d.setY(-0.01f);
-                        }
-                    } else {
-//                ROTATE ON MODEL X AXE
-                        if (event.getY() < midCoordonates[1]) {
-                            v3d.setY(0.0f);
-                            v3d.setX(0.01f);
-                        } else {
-                            v3d.setY(0.0f);
-                            v3d.setX(-0.01f);
-                        }
-                    }
-                    Rotation rotation = new Rotation(v3d);
-//            TRUE option allow to concat value of V3d with the previous one
-                    mTempModel.setRotation(rotation, true);
-                }
-                break;
-            case MotionEvent.ACTION_DOWN:
-////                TEST CAD MODEL
-//                metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF);
-//                cadReset = (ImageButton) findViewById(R.id.resetCad);
-//                cadReset.setVisibility(View.VISIBLE);
-//                for (ContentModel cm : mContentModel) {
-////                    cm.getModel().setVisible(false);
-//                    if (cm.getContentType() == ContentType.CAD) {
-//                        mTrack = TrackState.CAD;
-//                        cm.getModel().setVisible(true);
-//                        cm.getModel().setCoordinateSystemID(cm.getCsi());
-//                    }
-//                }
-                break;
+        if (action == MotionEvent.ACTION_DOWN) {
+            fingerX = event.getX();
+            fingerY = event.getY();
         }
+        v.onTouchEvent(event);
+        boolean upDown = false;
+        boolean leftRight = false;
+        if (action == MotionEvent.ACTION_UP && mImageButton != null && mImageButton.getVisibility() == View.VISIBLE) {
+            mImageButton.setAnimation(animFadeOut);
+            arrowRight.setAnimation(animFadeOut);
+            arrowLeft.setAnimation(animFadeOut);
+            arrowDown.setAnimation(animFadeOut);
+            arrowUp.setAnimation(animFadeOut);
+            mImageButton.startAnimation(animFadeOut);
+            arrowRight.startAnimation(animFadeOut);
+            arrowLeft.startAnimation(animFadeOut);
+            arrowDown.startAnimation(animFadeOut);
+            arrowUp.startAnimation(animFadeOut);
+            mImageButton.setVisibility(View.GONE);
+            arrowLeft.setVisibility(View.GONE);
+            arrowRight.setVisibility(View.GONE);
+            arrowUp.setVisibility(View.GONE);
+            arrowDown.setVisibility(View.GONE);
+
+        }
+        if (action == MotionEvent.ACTION_MOVE && mImageButton != null) {
+            if (event.getX() > (mImageButton.getX() + 70) && !leftRight) {
+                v3d.setX(0.0f);
+                v3d.setY(0.01f);
+                arrowRight.setImageResource(R.drawable.ic_arrow_right_green);
+                arrowLeft.setImageResource(R.drawable.ic_arrow_left);
+                arrowUp.setImageResource(R.drawable.ic_arrow_up);
+                arrowDown.setImageResource(R.drawable.ic_arrow_down);
+                mImageButton.setImageResource(R.drawable.ic_reload);
+//            TRUE option allow to concat value of V3d with the previous one
+                mTempModel.setRotation(new Rotation(v3d), true);
+                upDown = true;
+            } else if (event.getX() < (mImageButton.getX() - 70) && !leftRight) {
+                arrowRight.setImageResource(R.drawable.ic_arrow_right);
+                arrowDown.setImageResource(R.drawable.ic_arrow_down);
+                arrowUp.setImageResource(R.drawable.ic_arrow_up);
+                mImageButton.setImageResource(R.drawable.ic_reload);
+                arrowLeft.setImageResource(R.drawable.ic_arrow_left_green);
+                v3d.setX(0.0f);
+                v3d.setY(-0.01f);
+                mTempModel.setRotation(new Rotation(v3d), true);
+                upDown = true;
+            }
+            if (event.getY() > (mImageButton.getY() + 70) && !upDown) {
+                leftRight = true;
+                arrowRight.setImageResource(R.drawable.ic_arrow_right);
+                arrowLeft.setImageResource(R.drawable.ic_arrow_left);
+                arrowUp.setImageResource(R.drawable.ic_arrow_up);
+                mImageButton.setImageResource(R.drawable.ic_reload);
+                arrowDown.setImageResource(R.drawable.ic_arrow_down_green);
+                v3d.setX(0.01f);
+                v3d.setY(0.0f);
+                mTempModel.setRotation(new Rotation(v3d), true);
+            } else if (event.getY() < (mImageButton.getY() - 70) && !upDown) {
+                leftRight = true;
+                arrowRight.setImageResource(R.drawable.ic_arrow_right);
+                arrowLeft.setImageResource(R.drawable.ic_arrow_left);
+                arrowDown.setImageResource(R.drawable.ic_arrow_down);
+                arrowUp.setImageResource(R.drawable.ic_arrow_up_green);
+                mImageButton.setImageResource(R.drawable.ic_reload);
+                v3d.setX(-0.01f);
+                v3d.setY(0.0f);
+                mTempModel.setRotation(new Rotation(v3d), true);
+            }
+            if (event.getX() <= fingerX + 50 && event.getX() >= fingerX) {
+                if (event.getY() >= fingerY && event.getY() <= fingerY + 50) {
+                    leftRight = false;
+                    upDown = false;
+                    arrowRight.setImageResource(R.drawable.ic_arrow_right);
+                    arrowLeft.setImageResource(R.drawable.ic_arrow_left);
+                    arrowDown.setImageResource(R.drawable.ic_arrow_down);
+                    arrowUp.setImageResource(R.drawable.ic_arrow_up);
+                    mImageButton.setImageResource(R.drawable.ic_reload_green);
+                }
+            }
+        }
+        if (action == MotionEvent.ACTION_UP && event.getX() <= fingerX + 50 && event.getX() >= fingerX) {
+            if (event.getY() >= fingerY && event.getY() <= fingerY + 50) {
+                mTempModel.setRotation(new Rotation(new Vector3d(0.0f, 0.f, 0.f)), false);
+            }
+        }
+
+//        switch (action) {
+//            case MotionEvent.ACTION_DOWN:
+//
+//////                TEST CAD MODEL
+////                metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF);
+////                cadReset = (ImageButton) findViewById(R.id.resetCad);
+////                cadReset.setVisibility(View.VISIBLE);
+////                for (ContentModel cm : mContentModel) {
+////                    cm.getModel().setVisible(false);
+////                    if (cm.getContentType() == ContentType.CAD) {
+////                        mTrack = TrackState.CAD;
+////                        cm.getModel().setVisible(true);
+////                        cm.getModel().setCoordinateSystemID(cm.getCsi());
+////                    }
+////                }
+//                break;
+//        }
         return true;
     }
+
 
     //Screen shot saved in a folder visible inside the gallery
     void onScreenshot(String pathStorage, String folderName) {
@@ -211,7 +323,6 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
     void contentGestion(ContentType c, VideoView v, MediaPlayer m) {
         if (mTrack == TrackState.GPS) {
             mTrack = TrackState.NOGPS;
-
             metaioSDK.setTrackingConfiguration(PATH_TO_IMAGE_TRACKING_CONF);
 //            mLinearLayoutLLA.setVisibility(View.GONE);
 //            mLinearLayoutLLA2.setVisibility(View.GONE);
@@ -246,8 +357,8 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 audioStream(AsyncWifiConnect.getIpAdress(), "near.mp3");
             else
                 audioStream(AsyncWifiConnect.getIpAdress(), "toofar.mp3");
-        }catch (NullPointerException e){
-            Toast.makeText(this,"Contneu introuvable",Toast.LENGTH_SHORT);
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "Contenu introuvable", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -256,14 +367,16 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
     //stream videocontent
     void onVideo(String ip, String fileName) {
 //    enum  used in onTracking event
-        ct = ContentType.Audio;
+        ct = ContentType.Video;
         contentGestion(ct, vv, mMediaPlayer);
+
         vv = (VideoView) findViewById(R.id.videoview);
         if (mState == EState.TRACKING) {
             if (!vv.isPlaying()) {
                 vv.setVisibility(View.VISIBLE);
 //                playing video
-                vv.setVideoURI(Uri.parse("http://" + ip + "/www/" + fileName));
+                vv.setVideoURI(Uri.parse("http://" + ip + "/www/" + fileName)); // AssetsManager.getAbsolutePath()+"/sandettie.3gp"
+                Log.e("eeeee", "http://" + ip + "/www/" + fileName);
                 vv.requestFocus();
 //                start video when it's buffered
                 vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -311,23 +424,18 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
             metaioSDK.setLLAObjectRenderingLimits(5, 200);
             // Set render frustum accordingly
             metaioSDK.setRendererClippingPlaneLimits(10, 220000);
-
-
         }
     }
 
     public void onContentSelect(View v) {
-
         switch (v.getId()) {
             case R.id.videoContent:
                 try {
-
-
-                onVideo(AsyncWifiConnect.getIpAdress(), "sandettie.mp4");
-                contentL.clearAnimation();
-                contentL.setVisibility(View.GONE);
-                }catch (NullPointerException e){
-                    Toast.makeText(this,"Video introuvable",Toast.LENGTH_SHORT);
+                    contentL.clearAnimation();
+                    contentL.setVisibility(View.GONE);
+                    onVideo(AsyncWifiConnect.getIpAdress(), "sandettie.3gp");
+                } catch (NullPointerException e) {
+                    Toast.makeText(this, "Video introuvable", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.audioContent:
@@ -342,19 +450,32 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 if (currentContentModel.getContentType() == ContentType.Animations)
                     currentContentModel.getModel().startAnimation(currentContentModel.getAnimName(), true);
                 break;
-            case R.id.crossSection:
-                contentL2.clearAnimation();
-                contentL2.setVisibility(View.GONE);
-                currentContentModel.getModel().setVisible(true);
-                break;
             case R.id.trackCadSandettie:
                 contentL.clearAnimation();
                 contentL.setVisibility(View.GONE);
-                metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF);
+                PATH_TO_CAD_TRACKING_CONF= AssetsManager.getAbsolutePath() + "/CAD/Sandettie/Tracking.xml";
+                metaioSDK.setTrackingConfiguration( PATH_TO_CAD_TRACKING_CONF );
                 cadReset = (ImageButton) findViewById(R.id.resetCad);
                 cadReset.setVisibility(View.VISIBLE);
+                currentContentModel.getModel().setVisible(false);
                 for (ContentModel cm : mContentModel) {
-                    if (cm.getContentType() == ContentType.CAD) {
+
+                    if (cm.getContentType() == ContentType.CAD  && cm.targetName.equals("CADSandettie")) {
+                        mTrack = TrackState.CAD;
+                        cm.getModel().setVisible(true);
+                        cm.getModel().setCoordinateSystemID(cm.getCsi());
+                    }
+                }
+                break;
+            case R.id.guide:
+                PATH_TO_CAD_TRACKING_CONF= AssetsManager.getAbsolutePath() + "/CAD/Panneau/Tracking.xml";
+                metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF );
+                cadReset = (ImageButton) findViewById(R.id.resetCad);
+                cadReset.setVisibility(View.VISIBLE);
+                currentContentModel.getModel().setVisible(false);
+                for (ContentModel cm : mContentModel) {
+                    if (cm.getContentType() == ContentType.CAD && cm.targetName.equals("CADPanneau")) {
+                        Log.e("ok","ok");
                         mTrack = TrackState.CAD;
                         cm.getModel().setVisible(true);
                         cm.getModel().setCoordinateSystemID(cm.getCsi());
@@ -365,6 +486,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF);
                 break;
         }
+
     }
 
     //******************************************************************************************************
@@ -394,15 +516,11 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
 //            GPS TRACKING
             mContentModel.add(new ContentModel("petit bateau", "PetitBateau/petitBateau.mfbx", ContentType.Location, 100, 51.037684, 2.373176, 0, 0));
 //            CAD Tracking
-//            mContentModel.add(new ContentModel("displayModel", "Bateau/bateau.mfbx", ContentType.CAD, "TrackingPoseSandettie", 1, 0.1f));
-////            mContentModel.add(new ContentModel("occlusin", "TeaPot/test_anim_teapot.mfbx", ContentType.CAD, "OcclusionSandettie", 1, 0.5f));
-//            mContentModel.add(new ContentModel("Aide visuel", AssetsManager.getAbsolutePath() + "/CAD/Sandettie/SurfaceModel.obj", ContentType.CAD, "InitialPoseSandettie", 2, 1));
+            mContentModel.add(new ContentModel("displayModel", "Bateau/texte.mfbx", ContentType.CAD, "CADSandettie", 1, 0.6f));
+            mContentModel.add(new ContentModel("Aide visuel", AssetsManager.getAbsolutePath() + "/CAD/Sandettie/SurfaceModel.obj", ContentType.CAD, "CADSandettie", 2, 1f));
 
-//            CAD TEST*****************
-            mContentModel.add(new ContentModel("displayModel", "Boite/Boite_Int.mfbx", ContentType.CAD, "TrackingPoseBoite", 1, 1f));
-//            mContentModel.add(new ContentModel("occlusion", "Boite/Occlusion.obj", ContentType.CAD, "TrackingPoseBoite", 1, 1f));
-            mContentModel.add(new ContentModel("Aide visuel", AssetsManager.getAbsolutePath() + "/CAD/Boite/Boite_aideviz.mfbx", ContentType.CAD, "InitialPoseBoite", 2, 1f));
-            mContentModel.add(new ContentModel("Aide visuel", AssetsManager.getAbsolutePath() + "/CAD/Boite/SurfaceModel.obj", ContentType.CAD, "InitialPoseBoite", 2, 1f));
+            mContentModel.add(new ContentModel("displayModel", "Panneau/pirate.mfbx", ContentType.CAD, "CADPanneau", 1, 5f));
+            mContentModel.add(new ContentModel("Aide visuel", AssetsManager.getAbsolutePath() + "/CAD/Panneau/SurfaceModel.obj", ContentType.CAD, "CADPanneau", 2, 1));
 
         } catch (Exception e) {
             Log.e("ERREUR", "impossible de charger les contenus");
@@ -459,7 +577,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 @Override
                 public void run() {
                     contentL = (LinearLayout) findViewById(R.id.contentLayout);
-                    contentL2 = (ImageButton) findViewById(R.id.crossSection);
+                    contentL2 = (ImageButton) findViewById(R.id.rotateModel);
                     if (mTrack != TrackState.CAD) {
                         if (currentContentModel.getTargetName().equals("Sandettie") && mState == EState.TRACKING) {
                             contentL.setVisibility(View.VISIBLE);
@@ -467,13 +585,6 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                         } else {
                             contentL.clearAnimation();
                             contentL.setVisibility(View.GONE);
-                        }
-                        if (currentContentModel.getTargetName().equals("Duchesse") && mState == EState.TRACKING) {
-                            contentL2.setVisibility(View.VISIBLE);
-                            contentL2.startAnimation(animBounce);
-                        } else {
-                            contentL2.clearAnimation();
-                            contentL2.setVisibility(View.GONE);
                         }
                     } else {
                         contentL.clearAnimation();
@@ -507,6 +618,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 mModel.setTransparency(0.8f);
             } else
                 mModel = metaioSDK.createGeometry(cType.getLocation() + contentToDisplay);
+
 //****************TEST*********************
             if (name.equals("occlusion")) {
                 mModel.setOcclusionMode(true);
@@ -519,6 +631,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
 
             if (mModel != null) {
                 mModel.setScale(scale);
+
                 if (cType == ContentType.Animations)
                     animName = mModel.getAnimationNames().get(0);
             } else

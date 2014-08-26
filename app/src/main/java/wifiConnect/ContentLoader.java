@@ -35,7 +35,7 @@ public class ContentLoader extends AsyncTask<String, Integer, Integer> {
     private final static String FILE = "files.zip";
     private final static String SERVER_PATH = "www/";
     private final static String PASSWORD = ".hd161~n=:=_e~X";
-    private static String ROOT_INTERNAL;
+    public static String ROOT_INTERNAL;
     private ImageView mImageView;
    private final Animation animRotate;
 
@@ -58,7 +58,7 @@ public class ContentLoader extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(String... params) {
-        DownloadFromUrl(url, FILE, SERVER_PATH);
+        downloadFromUrl(url, FILE, SERVER_PATH);
         return null;
     }
 
@@ -83,7 +83,7 @@ public class ContentLoader extends AsyncTask<String, Integer, Integer> {
 
     }
 
-    void DownloadFromUrl(String downloadUrl, String fileName, String folder) {
+    void downloadFromUrl(String downloadUrl, String fileName, String folder) {
         try {
             URL url = new URL("http://" + downloadUrl + "/" + folder + "/" + fileName);
             File file = new File(mContext.getCacheDir(), fileName);
@@ -130,9 +130,5 @@ public class ContentLoader extends AsyncTask<String, Integer, Integer> {
         } catch (IOException e) {
             Log.e("DownloadManager", "Error: " + e);
         }
-    }
-
-    public static String getPathOfFolder() {
-        return ROOT_INTERNAL;
     }
 }

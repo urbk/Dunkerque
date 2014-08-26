@@ -5,6 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.util.Log;
+import android.widget.Toast;
+
+import static utils.Utils.getWifiStrength;
 
 
 /**
@@ -14,9 +18,9 @@ public class WifiReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-       switch (manager.getWifiState()){
-           case WifiManager.WIFI_STATE_DISABLED:
+//        manager.startScan();
+        Toast.makeText(context,getWifiStrength(manager),Toast.LENGTH_SHORT);
+        Log.e("RSSI",getWifiStrength(manager)+"");
 
-       }
     }
 }

@@ -33,9 +33,9 @@ import com.metaio.tools.SystemInfo;
 /**
  * This is base activity to use metaio SDK. It creates metaio GLSurfaceView and handle all its
  * callbacks and lifecycle.
- * 
+ *
  */
-public abstract class ARViewActivity extends FragmentActivity implements MetaioSurfaceView.Callback, OnTouchListener
+public abstract class ARViewActivity extends FragmentActivity implements MetaioSurfaceView.Callback
 {
 	protected static boolean nativeLibsLoaded;
 
@@ -89,16 +89,16 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 	 * Provide resource for GUI overlay if required.
 	 * <p>
 	 * The resource is inflated into mGUIView which is added in onStart
-	 * 
+	 *
 	 * @return Resource ID of the GUI view
 	 */
 	protected abstract int getGUILayout();
 
 	/**
 	 * Provide metaio SDK callback handler if desired.
-	 * 
+	 *
 	 * @see IMetaioSDKCallback
-	 * 
+	 *
 	 * @return Return metaio SDK callback handler
 	 */
 	protected abstract IMetaioSDKCallback getMetaioSDKCallbackHandler();
@@ -110,7 +110,7 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 
 	/**
 	 * Called when a geometry is touched.
-	 * 
+	 *
 	 * @param geometry Geometry that is touched
 	 */
 	protected abstract void onGeometryTouched(IGeometry geometry);
@@ -280,7 +280,7 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 			mSurfaceView = new MetaioSurfaceView(this);
 			mSurfaceView.registerCallback(this);
 			mSurfaceView.setKeepScreenOn(true);
-			mSurfaceView.setOnTouchListener(this);
+//			mSurfaceView.setOnTouchListener(this);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			{
 				mSurfaceView.setPreserveEGLContextOnPause(true);
@@ -363,39 +363,39 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 
 		MetaioDebug.log("onConfigurationChanged: " + rotation);
 	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event)
-	{
-		if (event.getAction() == MotionEvent.ACTION_UP)
-		{
-			MetaioDebug.log("ARViewActivity touched at: " + event.toString());
-
-			try
-			{
-
-				final int x = (int)event.getX();
-				final int y = (int)event.getY();
-
-				// ask the SDK if a geometry has been hit
-				IGeometry geometry = metaioSDK.getGeometryFromViewportCoordinates(x, y, true);
-				if (geometry != null)
-				{
-					MetaioDebug.log("ARViewActivity geometry found: " + geometry);
-					onGeometryTouched(geometry);
-				}
-
-			}
-			catch (Exception e)
-			{
-				MetaioDebug.log(Log.ERROR, "onTouch: " + e.getMessage());
-				MetaioDebug.printStackTrace(Log.ERROR, e);
-			}
-
-		}
-
-		return true;
-	}
+//
+//	@Override
+//	public boolean onTouch(View v, MotionEvent event)
+//	{
+//		if (event.getAction() == MotionEvent.ACTION_UP)
+//		{
+//			MetaioDebug.log("ARViewActivity touched at: " + event.toString());
+//
+//			try
+//			{
+//
+//				final int x = (int)event.getX();
+//				final int y = (int)event.getY();
+//
+//				// ask the SDK if a geometry has been hit
+//				IGeometry geometry = metaioSDK.getGeometryFromViewportCoordinates(x, y, true);
+//				if (geometry != null)
+//				{
+//					MetaioDebug.log("ARViewActivity geometry found: " + geometry);
+//					onGeometryTouched(geometry);
+//				}
+//
+//			}
+//			catch (Exception e)
+//			{
+//				MetaioDebug.log(Log.ERROR, "onTouch: " + e.getMessage());
+//				MetaioDebug.printStackTrace(Log.ERROR, e);
+//			}
+//
+//		}
+//
+//		return true;
+//	}
 
 	@Override
 	public void onSurfaceCreated()

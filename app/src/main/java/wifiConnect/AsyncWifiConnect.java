@@ -18,13 +18,15 @@ import com.urbik.dunkerque.R;
 
 import java.util.List;
 
+import static utils.Utils.checkSsid;
+import static utils.Utils.getWifiStrength;
+
 /**
  * Created by Antoine on 07/08/2014.
  */
 public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
     private Activity mContext;
-
-    private static WifiManager manager;
+    private static WifiManager mWifimanager;
     private final WifiConfiguration wconf;
     private String ssid;
     private boolean isConnected = false;
@@ -33,7 +35,7 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
 
     public AsyncWifiConnect(Activity context) {
         this.mContext = context;
-        manager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        mWifimanager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         this.wconf = new WifiConfiguration();
         mImageView = (ImageView) mContext.findViewById(R.id.ic_wifi_work);
         animRotate = AnimationUtils.loadAnimation(mContext,
@@ -42,22 +44,22 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
         wconf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         wconf.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
         wconf.SSID = "";
-        this.ssid = manager.getConnectionInfo().getSSID();
+        this.ssid =  mWifimanager.getConnectionInfo().getSSID();
     }
 
     @Override
     protected void onPreExecute() {
 
         mImageView.startAnimation(animRotate);
-        if (!manager.isWifiEnabled())
-            manager.setWifiEnabled(true);
+        if (! mWifimanager.isWifiEnabled())
+            mWifimanager.setWifiEnabled(true);
 
     }
 
     @Override
     protected String doInBackground(String... params) {
 //        While wifi isn't fully enabled
-        while (manager.getWifiState() != WifiManager.WIFI_STATE_ENABLED) {
+        while ( mWifimanager.getWifiState() != WifiManager.WIFI_STATE_ENABLED) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -71,27 +73,27 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
         if (!checkSsid(ssid)) {
-            manager.startScan();
+            mWifimanager.startScan();
 //            intent.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-            List<ScanResult> scanRes = manager.getScanResults();
+            List<ScanResult> scanRes =  mWifimanager.getScanResults();
             for (ScanResult s : scanRes) {
 //      if device is connect to a wrong network search if a right network is near
                 if (!isConnected) {
                     for (Network n : Network.values()) {
                         if ((n.toString()).equals(s.SSID)) {
                             wconf.SSID = '"' + s.SSID + '"';
-                            int netId = manager.addNetwork(wconf);
-                            manager.updateNetwork(wconf);
-                            manager.enableNetwork(netId, true);
-                            while (manager.getConnectionInfo().getSupplicantState() != SupplicantState.COMPLETED || !checkSsid(ssid) || getIpAdress().equals("0.0.0.0")) {
-                                ssid = manager.getConnectionInfo().getSSID();
+                            int netId =  mWifimanager.addNetwork(wconf);
+                            mWifimanager.updateNetwork(wconf);
+                            mWifimanager.enableNetwork(netId, true);
+                            while ( mWifimanager.getConnectionInfo().getSupplicantState() != SupplicantState.COMPLETED || !checkSsid(ssid) || getIpAdress().equals("0.0.0.0")) {
+                                ssid =  mWifimanager.getConnectionInfo().getSSID();
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            if (getWifiStrength() > 79)
+                            if (getWifiStrength( mWifimanager) > 79)
                                 isConnected = true;
                         }
                     }
@@ -120,22 +122,12 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
     }
 
 
-    private boolean checkSsid(String anSsid) {
-        //if app is connected to a network
-        if (ssid != null) {
-            // compare current ssid with allowed ssid
-            for (Network n : Network.values()) {
-                if (('"' + n.toString() + '"').equals(anSsid))
-                    return true;
-            }
-        }
-        return false;
-    }
+
 
 
     //    Get ip of the router
     public static String getIpAdress() {
-        int ip = manager.getDhcpInfo().gateway;
+        int ip =  mWifimanager.getDhcpInfo().gateway;
 
         return String.format(
                 "%d.%d.%d.%d",
@@ -145,13 +137,5 @@ public class AsyncWifiConnect extends AsyncTask<String, Integer, String> {
                 (ip >> 24 & 0xff));
     }
 
-    //    return power of signal
-    private int getWifiStrength() {
-        try {
-            int rssi = manager.getConnectionInfo().getRssi();
-            return WifiManager.calculateSignalLevel(rssi, 100);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
+
 }

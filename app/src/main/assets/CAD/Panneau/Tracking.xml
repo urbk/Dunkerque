@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrackingData>
+    <Sensors>
+        <Sensor Type="EdgeBasedInitializationSensorSource">
+            <SensorID>EPanneauCAD</SensorID>
+            <Parameters>
+                <TriangleMesh>SurfaceModel.obj</TriangleMesh>
+                <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
+                <UseSensorsForPoseCreation>off</UseSensorsForPoseCreation>
+                <InitializationTestMode>false</InitializationTestMode>
+                <AutoInit>
+                    <PresetType>outdoor</PresetType>
+                </AutoInit>
+                <EdgeAlignment>
+                    <LineModel>LineModel.obj</LineModel>
+                    <MinQuality>0.55</MinQuality>
+                    <NumFeatures>280</NumFeatures>
+                </EdgeAlignment>
+                <FeatureTracking>
+                    <Parameters>
+                        <MapExtensionMethod>narrow</MapExtensionMethod>
+                        <NumExtensibleFeatures>3000</NumExtensibleFeatures>
+                    </Parameters>
+                    <FeatureOrientationAssignment>regular</FeatureOrientationAssignment>
+                </FeatureTracking>
+            </Parameters>
+            <SensorCOS>
+                <SensorCosID>TrackingPosePanneau</SensorCosID>
+            </SensorCOS>
+            <SensorCOS>
+                <SensorCosID>InitialPosePanneau</SensorCosID>
+            </SensorCOS>
+        </Sensor>
+    </Sensors>
+    <Connections>
+        <COS>
+            <Name>TrackingPosePanneau</Name>
+            <SensorSource>
+                <SensorID>PanneauCAD</SensorID>
+                <SensorCosID>TrackingPosePanneau</SensorCosID>
+            </SensorSource>
+        </COS>
+        <COS>
+            <Name>InitialPosePanneau</Name>
+            <SensorSource>
+                <SensorID>PanneauCAD</SensorID>
+                <SensorCosID>InitialPosePanneau</SensorCosID>
+            </SensorSource>
+        </COS>
+    </Connections>
+</TrackingData>

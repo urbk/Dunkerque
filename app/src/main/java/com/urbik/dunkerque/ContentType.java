@@ -16,7 +16,7 @@ public enum ContentType {
 
 
     private String ct = "";
-    private String location = ContentLoader.getPathOfFolder() + "/";
+    private String location = ContentLoader.ROOT_INTERNAL + "/";
 
     //Constructeur
     ContentType(String ct) {
