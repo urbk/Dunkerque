@@ -9,7 +9,8 @@
     <VideoView
         android:id="@+id/videoview"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        />
 <ImageButton
     android:id="@+id/guide"
     android:layout_width="70dp"
@@ -18,6 +19,7 @@
     android:layout_margin="@dimen/activity_horizontal_margin"
     android:background="@drawable/round_corner"
     android:onClick="onContentSelect"/>
+
     <LinearLayout
         android:id="@+id/contentLayout"
         android:layout_width="wrap_content"
@@ -87,44 +89,7 @@
         android:background="@color/transparent"
         android:onClick="onContentSelect"
         android:visibility="gone"/>
-    <ImageButton
-        android:id="@+id/arrow_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_up"
-        android:background="@color/transparent"
-        android:onClick="onContentSelect"
-        android:visibility="gone"/>
-    <ImageButton
-        android:id="@+id/arrow_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_left"
-        android:background="@color/transparent"
-        android:onClick="onContentSelect"
-        android:visibility="gone"/>
-    <ImageButton
-        android:id="@+id/arrow_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_down"
-        android:background="@color/transparent"
-        android:onClick="onContentSelect"
-        android:visibility="gone"/>
-    <ImageButton
-        android:id="@+id/arrow_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        android:background="@color/transparent"
-        android:onClick="onContentSelect"
-        android:visibility="gone"/>
-    <!--android:longClickable="true"-->
-    <!--android:layout_gravity="bottom|right"-->
-    <!--android:layout_margin="@dimen/activity_horizontal_margin"-->
-    <!--android:layout_marginLeft="50dp"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:layout_marginBottom="10dp"-->
+
     <ImageButton
         android:id="@+id/resetCad"
         android:layout_width="70dp"
@@ -139,7 +104,28 @@
         android:layout_marginBottom="10dp"
         android:onClick="onContentSelect"
         android:visibility="gone" />
-
-
+<!--CHANGE DISPLAYED MODEL-->
+    <ImageButton
+        android:id="@+id/arrow_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/threeDcontent"
+        android:src="@drawable/ic_left_arrow"
+        android:background="@color/transparent"
+        android:onClick="onContentSelect"
+        android:layout_gravity="center_vertical|left"
+        android:visibility="gone"
+       />
+    <ImageButton
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/threeDcontent"
+        android:src="@drawable/ic_right_arrow"
+        android:background="@color/transparent"
+        android:onClick="onContentSelect"
+        android:layout_gravity="center_vertical|right"
+        android:visibility="gone"
+       />
 </FrameLayout>
 

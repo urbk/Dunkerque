@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 
-import com.metaio.sdk.ARViewActivity;
+
 import com.metaio.sdk.jni.IMetaioSDKAndroid;
 
 /**

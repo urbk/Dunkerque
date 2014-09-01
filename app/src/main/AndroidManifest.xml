@@ -31,16 +31,7 @@
         <activity
             android:name=".Tracking"
             android:screenOrientation="landscape" />
-        <activity android:name=".SplashScreen" />
 
-        <!--<receiver-->
-            <!--android:enabled="true"-->
-            <!--android:name="wifiConnect.WifiReceiver"-->
-            <!--android:label="wifiConnect.WifiReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.net.wifi.WifiManager.RSSI_CHANGED_ACTION" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
     </application>
 
 </manifest>

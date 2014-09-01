@@ -34,8 +34,8 @@
 
 	<Connections>
 		<COS>
-
-			<Name>Duchesse</Name>
+<!--Name is the targetName-->
+			<Name>Duchesse-Img</Name>
 			<Fuser Type="SmoothingFuser">
 				<Parameters>
 					<KeepPoseForNumberOfFrames>2</KeepPoseForNumberOfFrames>
@@ -79,7 +79,7 @@
 			</SensorSource>
 		</COS>
 		<COS>
-			<Name>Sandettie</Name>
+			<Name>Sandettie-Img</Name>
 			<Fuser Type="BestQualityFuser">
 				<Parameters>
 					<KeepPoseForNumberOfFrames>2</KeepPoseForNumberOfFrames>

@@ -13,16 +13,16 @@
                 </AutoInit>
                 <EdgeAlignment>
                     <LineModel>LineModel.obj</LineModel>
-                    <MinQuality>0.55</MinQuality>
+                    <MinQuality>0.75</MinQuality>
                     <VisibilityTest>
                         <TestRate>0.1000000015</TestRate>
                         <Enabled>false</Enabled>
                     </VisibilityTest>
-                    <NumFeatures>80</NumFeatures>
+                    <NumFeatures>580</NumFeatures>
                 </EdgeAlignment>
                 <FeatureTracking>
                     <Parameters>
-                        <MapExtensionMethod>narrow</MapExtensionMethod>
+                        <MapExtensionMethod>wide</MapExtensionMethod>
                         <NumExtensibleFeatures>3000</NumExtensibleFeatures>
                     </Parameters>
                     <FeatureOrientationAssignment>regular</FeatureOrientationAssignment>

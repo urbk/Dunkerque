@@ -2,7 +2,7 @@
 <TrackingData>
     <Sensors>
         <Sensor Type="EdgeBasedInitializationSensorSource">
-            <SensorID>EPanneauCAD</SensorID>
+            <SensorID>PanneauCAD</SensorID>
             <Parameters>
                 <TriangleMesh>SurfaceModel.obj</TriangleMesh>
                 <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
