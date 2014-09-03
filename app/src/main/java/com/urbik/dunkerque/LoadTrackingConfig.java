@@ -4,13 +4,12 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 
-
 import com.metaio.sdk.jni.IMetaioSDKAndroid;
 
 /**
  * Created by Antoine on 30/07/2014.
  */
-public class LoadTrackingConfig extends AsyncTask<String, Void,Boolean> {
+public class LoadTrackingConfig extends AsyncTask<String, Void, Boolean> {
     ProgressDialog progress;
     IMetaioSDKAndroid metaioSDK;
     ARViewActivity mArView;
@@ -24,7 +23,7 @@ public class LoadTrackingConfig extends AsyncTask<String, Void,Boolean> {
     protected void onPreExecute() {
         progress = new ProgressDialog(mArView);
         progress.setMessage("Patientez...");
-       progress.setProgressStyle(android.R.attr.progressBarStyleSmall);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.show();
     }
 

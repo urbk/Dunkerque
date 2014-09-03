@@ -8,8 +8,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -155,4 +158,17 @@ public class Utils {
             }
         }
     }
+    // Stream audio content
+   public static void audioStream(String ip, String fileName,MediaPlayer mMediaPlayer,MediaPlayer.OnPreparedListener listener) {
+        try {
+            mMediaPlayer.reset();
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setDataSource("http://" + ip + "/www/" + fileName);
+            mMediaPlayer.setOnPreparedListener(listener);
+            mMediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.display.DisplayManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -19,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.metaio.R;
 import com.metaio.sdk.MetaioDebug;
@@ -32,6 +35,8 @@ import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKAndroid;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.MetaioSDK;
+import com.metaio.sdk.jni.Rotation;
+import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.Memory;
 import com.metaio.tools.Screen;
 import com.metaio.tools.SystemInfo;
@@ -120,6 +125,20 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
      * @param geometry Geometry that is touched
      */
     protected abstract void onGeometryTouched(IGeometry geometry);
+
+    protected enum EState {
+        NOTTRACKING,
+        TRACKING
+    }
+
+    protected enum TrackState {
+        GPS,
+        NOGPS,
+        CAD
+    }
+
+    protected EState mState = EState.NOTTRACKING;
+    protected TrackState mTrack = TrackState.NOGPS;
 
     /**
      * Start camera. Override this to change camera or its parameters such as resolution, image flip
@@ -335,39 +354,26 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 
         MetaioDebug.log("onConfigurationChanged: " + rotation);
     }
-//
-//	@Override
-//	public boolean onTouch(View v, MotionEvent event)
-//	{
-//		if (event.getAction() == MotionEvent.ACTION_UP)
-//		{
-//			MetaioDebug.log("ARViewActivity touched at: " + event.toString());
-//
-//			try
-//			{
-//
-//				final int x = (int)event.getX();
-//				final int y = (int)event.getY();
-//
-//				// ask the SDK if a geometry has been hit
-//				IGeometry geometry = metaioSDK.getGeometryFromViewportCoordinates(x, y, true);
-//				if (geometry != null)
-//				{
-//					MetaioDebug.log("ARViewActivity geometry found: " + geometry);
-//					onGeometryTouched(geometry);
-//				}
-//
-//			}
-//			catch (Exception e)
-//			{
-//				MetaioDebug.log(Log.ERROR, "onTouch: " + e.getMessage());
-//				MetaioDebug.printStackTrace(Log.ERROR, e);
-//			}
-//
-//		}
-//
-//		return true;
-//	}
+
+
+    protected boolean onTouch(View v, MotionEvent event) {
+        final int x = (int) event.getX();
+        final int y = (int) event.getY();
+        if (event.getAction() == MotionEvent.ACTION_MOVE ||event.getAction() == MotionEvent.ACTION_DOWN) {
+            MetaioDebug.log("ARViewActivity touched at: " + event.toString());
+            try {
+                // ask the SDK if a geometry has been hit
+                IGeometry geometry = metaioSDK.getGeometryFromViewportCoordinates(x, y, true);
+                if (geometry != null) {
+                    onGeometryTouched(geometry);
+                }
+            } catch (Exception e) {
+                MetaioDebug.log(Log.ERROR, "onTouch: " + e.getMessage());
+                MetaioDebug.printStackTrace(Log.ERROR, e);
+            }
+        }
+        return true;
+    }
 
     @Override
     public void onSurfaceCreated() {
@@ -434,6 +440,12 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
         MetaioDebug.logMemory(getApplicationContext());
     }
 
+    //    ****************************************************************************PERSONNAL API**************************************************
+//    *******************************************************************************************************************************************
+//    *******************************************************************************************************************************************
+//    *******************************************************************************************************************************************
+//    *******************************************************************************************************************************************
+//    *******************************************************************************************************************************************
     public void createGeometryModel(EnumModel EnumModel[]) {
         try {
             for (EnumModel m : EnumModel) {
@@ -482,6 +494,7 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 
     }
 
+    // set tracking conf cad cos, visibility of the model
     void manageCadTracking(Map<String, EnumModel> trackingModel, EnumModel TrackingDisplayModel, EnumModel TrackingVisualModel, String pathToTrackConf, boolean isVisible) {
         metaioSDK.setTrackingConfiguration(pathToTrackConf);
         for (Map.Entry<String, EnumModel> entry : trackingModel.entrySet()) {
@@ -495,9 +508,9 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
         }
     }
 
+    //to siwtch displayed model on the same cad model
     public boolean onSwitchDisplayedModel(Map<String, EnumModel> m, EnumModel id, int numberOfModel, boolean right) {
         String[] subS = id.toString().split("-");
-
         boolean found = false;
         if (subS[2].equals("D")) {
             for (Map.Entry<String, EnumModel> entry : m.entrySet()) {
@@ -536,5 +549,32 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
         } else {
             return false;
         }
+    }
+
+    //    method call to enable or disabled media content
+    protected void contentGestion(ContentType c, VideoView v, MediaPlayer m, String path_track_conf, TrackState mTrack) {
+        if (mTrack == TrackState.GPS) {
+            mTrack = TrackState.NOGPS;
+            metaioSDK.setTrackingConfiguration(path_track_conf);
+        }
+        if (m.isPlaying()) m.reset();
+        if (v != null && v.isPlaying()) {
+            v.stopPlayback();
+            v.setVisibility(View.GONE);
+        }
+    }
+
+
+    protected void rotateModel(float fingerCoordinateX, float fingerCoordinateY, IGeometry geometry) {
+        float gX = geometry.getTranslation().getX();
+        float gY = geometry.getTranslation().getY();
+        Vector3d v3d = new Vector3d(0.0f, 0.0f, 0.0f);
+
+        if (fingerCoordinateX > gX) {
+            v3d.setY(0.05f);
+        }else  if (fingerCoordinateY > gY) {
+            v3d.setX(0.05f);
+        }
+        geometry.setRotation(new Rotation(v3d), true);
     }
 }

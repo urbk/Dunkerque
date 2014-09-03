@@ -29,7 +29,7 @@
                 </FeatureTracking>
             </Parameters>
             <SensorCOS>
-                <SensorCosID>TrackingPose</SensorCosID>
+                <SensorCosID>Panneau-CAD-V</SensorCosID>
             </SensorCOS>
             <SensorCOS>
                 <SensorCosID>InitialPose</SensorCosID>
@@ -38,10 +38,10 @@
     </Sensors>
     <Connections>
         <COS>
-            <Name>TrackingPose</Name>
+            <Name>Panneau-CAD-V</Name>
             <SensorSource>
                 <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
-                <SensorCosID>TrackingPose</SensorCosID>
+                <SensorCosID>Panneau-CAD-V</SensorCosID>
             </SensorSource>
         </COS>
         <COS>

@@ -35,6 +35,6 @@
     <string name="loading">Loading data           </string>
     <string name="decompress">Finalization             </string>
     <!--*************************SPLAH SCREEN*****************************-->
-
+<string name="welcome"><b>Bienvenue à Dunkerque !</b>\n vous êtes actuellement en face du port de commerce !\nAppuyez sur les images en surbrillance puis approchez vous-en pour en découvrir davantage</string>
 
 </resources>
