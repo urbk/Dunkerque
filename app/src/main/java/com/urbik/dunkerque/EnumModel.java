@@ -17,7 +17,7 @@ public enum EnumModel {
     SANDETTIE_CAD_DISPLAY_MODEL_3(new Model("Bateau/sandettie_d3.mfbx", ContentType.CAD, 1f, Model.INITIAL_POSE, Model.DISPLAY_MODEL),"Sandettie-CAD-D-3"),
     SANDETTIE_CAD_VISUAL_HELP(new Model(AssetsManager.getAbsolutePath() + "/CAD/Sandettie/SurfaceModel.obj", ContentType.CAD, 1.0f, Model.TRACKING_POSE, Model.VISUAL_HELP),"Sandettie-CAD-V"),
     //    *************
-    PANNEAU_CAD_DISPLAY_MODEL(new Model("Panneau/pirate.mfbx", ContentType.CAD, 5f, Model.INITIAL_POSE, Model.DISPLAY_MODEL),"Panneau-CAD-D"),
+    PANNEAU_CAD_DISPLAY_MODEL(new Model("Panneau/Panneau_display.mfbx", ContentType.CAD, 1f, Model.INITIAL_POSE, Model.DISPLAY_MODEL),"Panneau-CAD-D"),
     PANNEAU_CAD_VISUAL_HELP(new Model(AssetsManager.getAbsolutePath() + "/CAD/Panneau/SurfaceModel.obj", ContentType.CAD, 1.0f, Model.TRACKING_POSE, Model.VISUAL_HELP),"Panneau-CAD-V");
 
 

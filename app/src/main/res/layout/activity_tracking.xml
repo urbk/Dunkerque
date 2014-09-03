@@ -18,7 +18,8 @@
     android:src="@drawable/ic_guide"
     android:layout_margin="@dimen/activity_horizontal_margin"
     android:background="@drawable/round_corner"
-    android:onClick="onContentSelect"/>
+    android:onClick="onContentSelect"
+    android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/contentLayout"
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone">
-        <!--android:visibility="gone"-->
+
         <ImageButton
             android:id="@+id/audioContent"
             android:layout_width="70dp"
@@ -127,5 +128,20 @@
         android:layout_gravity="center_vertical|right"
         android:visibility="gone"
        />
+<ImageView
+    android:id="@+id/lost_connexion"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:src="@drawable/bg_lost"
+   android:visibility="gone" />
+  <ImageButton
+      android:id="@+id/retry_co"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_retry_co"
+      android:background="@color/transparent"
+      android:onClick="onContentSelect"
+      android:visibility="gone"/>
 </FrameLayout>
 

@@ -12,15 +12,15 @@
                 </color>
                 <color name="metaiocolor" >#FF0654A5
                 </color>
-                <color name="listViewText" >#FF282828
-                </color>
                 <color name="poiDetailBackground" >#CC000000
+                </color>
+                <color name="listViewText" >#FF282828
                 </color>
                 <color name="screenTitle" >#FFFFFFFF
                 </color>
-                <color name="listViewBackground" >#FFECECEC
-                </color>
                 <color name="sponsoredBackground" >#E6FFFF99
+                </color>
+                <color name="listViewBackground" >#FFECECEC
                 </color>
                 <color name="transparent" >#00000000
                 </color>
@@ -45,26 +45,26 @@ false
                     name="imageButton"
                     type="id"/>
                 <item
-                    name="audioButton"
-                    type="id"/>
-                <item
                     name="emailButton"
                     type="id"/>
                 <item
-                    name="routeButton"
+                    name="audioButton"
                     type="id"/>
                 <item
                     name="callButton"
                     type="id"/>
                 <item
-                    name="homePageButton"
+                    name="routeButton"
                     type="id"/>
                 <item
-                    name="videoButton"
+                    name="homePageButton"
                     type="id"/>
                 <item
                     name="metaioSDKSignature"
                     type="string"/>
+                <item
+                    name="videoButton"
+                    type="id"/>
             </file>
             <file
                 path="D:\Dunkerque2\metaioSDK\res\values\strings.xml"
@@ -91,13 +91,13 @@ false
                 </string>
                 <string name="MSGE_FRIEND_REMOVED" >Removing friend failed.
                 </string>
-                <string name="LBL_MODEL" >Model
-                </string>
                 <string name="MSGI_USERS_NOT_FOUND" >No users found, please adjust keywords and try again!
                 </string>
-                <string name="BTN_CANCEL" >Cancel
+                <string name="LBL_MODEL" >Model
                 </string>
                 <string name="MSGI_IMAGE_SAVED" >Image saved at %s
+                </string>
+                <string name="BTN_CANCEL" >Cancel
                 </string>
                 <string name="LBL_CHANNELS" >Channels
                 </string>
@@ -163,9 +163,9 @@ false
                 </string>
                 <string name="BTN_EXIT" >Exit
                 </string>
-                <string name="LBL_MY_COMMENT" >My comment
-                </string>
                 <string name="CATEGORY_MY_CHANNELS" >My Channels
+                </string>
+                <string name="LBL_MY_COMMENT" >My comment
                 </string>
                 <string name="MSGE_DELETE_POI" >Deleting point of interest failed.
                 </string>
@@ -175,9 +175,9 @@ false
                 </string>
                 <string name="BTN_SIGNUP_LOGIN" >Sign up/Login
                 </string>
-                <string name="LBL_DONE" >Done
-                </string>
                 <string name="BTN_TAG_VISIBILITY" >Tag Visibility
+                </string>
+                <string name="LBL_DONE" >Done
                 </string>
                 <string name="BTN_LLAMARKER" >Detect
                 </string>
@@ -193,17 +193,17 @@ false
                 </string>
                 <string name="MSGE_FRIENDSHIP_REQUEST" >Friendship request failed. This can happen if you already requested this friendship.
                 </string>
-                <string name="MSG_TITLE_LIKE_APP" >Like this App?
-                </string>
-                <string name="LBL_NOTE" >Note
+                <string name="LBL_HELPTXT_NEARME_HOMESCREEN" >Explore location based channels around you
                 </string>
                 <string name="CATEGORY_CULTURE" >Culture
                 </string>
-                <string name="LBL_HELPTXT_NEARME_HOMESCREEN" >Explore location based channels around you
+                <string name="LBL_NOTE" >Note
                 </string>
-                <string name="MSG_TITLE_PLACING_MODEL_FAILED" >Placing model failed.
+                <string name="MSG_TITLE_LIKE_APP" >Like this App?
                 </string>
                 <string name="MSGE_NO_INTERNET" >No Internet Connection
+                </string>
+                <string name="MSG_TITLE_PLACING_MODEL_FAILED" >Placing model failed.
                 </string>
                 <string name="LBL_PROFILE" >Profile
                 </string>
@@ -215,9 +215,9 @@ false
                 </string>
                 <string name="CATEGORY_NEARBY" >Nearby
                 </string>
-                <string name="BTN_MOST_RELEVANT" >Most Relevant
-                </string>
                 <string name="MSGI_HISTORY_EMPTY" >History is empty!
+                </string>
+                <string name="BTN_MOST_RELEVANT" >Most Relevant
                 </string>
                 <string name="HNT_TWITTER_USERNAME" >Twitter username
                 </string>
@@ -233,13 +233,13 @@ false
                 </string>
                 <string name="BTN_AGREE_TERMS" >I agree to the Terms of Service and Privacy Policy
                 </string>
-                <string name="LBL_X_AWAY" >%1$i%2$@ away
-                </string>
                 <string name="BTN_NO" >No
                 </string>
-                <string name="LBL_M_AWAY" >%i m away
+                <string name="LBL_X_AWAY" >%1$i%2$@ away
                 </string>
                 <string name="MSGI_LOADING_POIS" >Loading points of interest…
+                </string>
+                <string name="LBL_M_AWAY" >%i m away
                 </string>
                 <string name="MSGQ_LOGOUT" >Do you want to logout?
                 </string>
@@ -465,9 +465,9 @@ false
                 </string>
                 <string name="BTN_SOCIAL" >My Junaio
                 </string>
-                <string name="BTN_GO" >Go
-                </string>
                 <string name="MENU_OPEN_IMG_EXTERNAL" >Open image in a browser
+                </string>
+                <string name="BTN_GO" >Go
                 </string>
                 <string name="CATEGORY_FOOD" >Food
                 </string>
@@ -477,9 +477,9 @@ false
                 </string>
                 <string name="MSGW_BLACK_LIST" >Unfortunately junaio is not compatible with your phone. For any questions or feedback, please contact us directly.
                 </string>
-                <string name="LBL_CHARACTERS_LEFT_FOR_INPUT" >%d characters left.
-                </string>
                 <string name="BTN_LICENSE" >License
+                </string>
+                <string name="LBL_CHARACTERS_LEFT_FOR_INPUT" >%d characters left.
                 </string>
                 <string name="CATEGORY_HISTORY" >History
                 </string>
@@ -493,15 +493,15 @@ false
                 </string>
                 <string name="LBL_SEARCHING_CHANNELS" >Searching for channels
                 </string>
-                <string name="MSGE_HISTORY_NOT_CLEARED" >Error clearing channels\' history
-                </string>
                 <string name="LBL_ADD_COMMENT" >Add a comment
+                </string>
+                <string name="MSGE_HISTORY_NOT_CLEARED" >Error clearing channels\' history
                 </string>
                 <string name="LBL_CHANNEL_STATE_ACTIVE" >Active
                 </string>
-                <string name="BTN_ACCEPT" >Accept
-                </string>
                 <string name="MSGE_VERIFY_PASSWORD" >Please verify that your password is at least 5 characters long.
+                </string>
+                <string name="BTN_ACCEPT" >Accept
                 </string>
                 <string name="LBL_ERROR" >Error
                 </string>
@@ -511,15 +511,15 @@ false
                 </string>
                 <string name="LBL_APPLICATION_NAME" >junaio
                 </string>
-                <string name="MSG_TITLE_TERMS_CONDITIONS" >Terms and conditions
-                </string>
                 <string name="BTN_ROUTE" >Route
+                </string>
+                <string name="MSG_TITLE_TERMS_CONDITIONS" >Terms and conditions
                 </string>
                 <string name="MSGQ_WANT_TO_CONTINUE" >Are you sure you want to continue?
                 </string>
-                <string name="LBL_IMAGE" >Image
-                </string>
                 <string name="BTN_SIGN_UP" >Sign Up
+                </string>
+                <string name="LBL_IMAGE" >Image
                 </string>
                 <string name="LBL_MINUTE_AGO" >%d minute ago
                 </string>
@@ -529,9 +529,9 @@ false
                 </string>
                 <string name="MSGI_DOWNLOADING" >Downloading %s …
                 </string>
-                <string name="LBL_FRIENDS" >Friends
-                </string>
                 <string name="CATEGORY_BANKING" >Banking
+                </string>
+                <string name="LBL_FRIENDS" >Friends
                 </string>
                 <string name="BTN_ADD" >Add
                 </string>
@@ -549,23 +549,23 @@ false
                 </string>
                 <string name="LBL_ADD_MODEL" >Add model
                 </string>
-                <string name="MSGE_LOGIN" >Login failed. Please verify your username and password.
+                <string name="MSGE_PUBLISH_COMMENT" >Publishing of comment failed.
                 </string>
                 <string name="LBL_MINUTES_AGO" >%d minutes ago
                 </string>
-                <string name="MSGE_PUBLISH_COMMENT" >Publishing of comment failed.
-                </string>
-                <string name="MSGE_LLA_MARKER_DETECTED" >Detection of LLA marker failed. Please try again.
+                <string name="MSGE_LOGIN" >Login failed. Please verify your username and password.
                 </string>
                 <string name="MSGE_UPDATE_CHANNEL" >Channel update failed.
+                </string>
+                <string name="MSGE_LLA_MARKER_DETECTED" >Detection of LLA marker failed. Please try again.
                 </string>
                 <string name="BTN_SIGNUP_NEWSLETTER" >Signup to junaio newsletter
                 </string>
                 <string name="BTN_MANAGE_CHANNEL" >Manage this channel
                 </string>
-                <string name="MSGE_NOT_AVAILABLE" >not available
-                </string>
                 <string name="MSGI_THANK_YOU" >Thank you
+                </string>
+                <string name="MSGE_NOT_AVAILABLE" >not available
                 </string>
                 <string name="BTN_TAG_THE_WORLD" >Tag the World
                 </string>
@@ -573,17 +573,17 @@ false
                 </string>
                 <string name="MSG_TITLE_WARNING" >Warning
                 </string>
-                <string name="LBL_HOUR_AGO" >%d hour ago
-                </string>
                 <string name="MSGI_NO_RESULTS" >Search failed. Please try again.
                 </string>
-                <string name="MSGE_INVALID_USERNAME" >Please type in a valid username.
+                <string name="LBL_HOUR_AGO" >%d hour ago
                 </string>
-                <string name="BTN_PLAY_AUDIO" >Play Audio
+                <string name="MSGW_LOCATION_UNAVAILABLE" >Current location is not available, please enable GPS in the settings
                 </string>
                 <string name="MSGI_STARTING_JUNAIO" >Starting junaio…
                 </string>
-                <string name="MSGW_LOCATION_UNAVAILABLE" >Current location is not available, please enable GPS in the settings
+                <string name="BTN_PLAY_AUDIO" >Play Audio
+                </string>
+                <string name="MSGE_INVALID_USERNAME" >Please type in a valid username.
                 </string>
                 <string name="MSG_TITLE_SEARCHING_CHANNELS" >Channels
                 </string>
@@ -595,13 +595,13 @@ false
                 </string>
                 <string name="MSGE_TRY_AGAIN" >There has been a server error. Please try again later.
                 </string>
-                <string name="MSGE_NO_EXTERNAL_MEMORY" >Please make sure that SD card is available on the phone and the phone is not connected to the USB cable.
-                </string>
                 <string name="MSGI_SYNCING_MODELS" >Syncing models
                 </string>
-                <string name="BTN_MY_JUNAIO" >My junaio
+                <string name="MSGE_NO_EXTERNAL_MEMORY" >Please make sure that SD card is available on the phone and the phone is not connected to the USB cable.
                 </string>
                 <string name="BTN_FILTER" >Filter
+                </string>
+                <string name="BTN_MY_JUNAIO" >My junaio
                 </string>
                 <string name="HNT_PASSWORD" >Password
                 </string>

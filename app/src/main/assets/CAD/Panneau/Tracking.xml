@@ -2,19 +2,23 @@
 <TrackingData>
     <Sensors>
         <Sensor Type="EdgeBasedInitializationSensorSource">
-            <SensorID>PanneauCAD</SensorID>
+            <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
             <Parameters>
                 <TriangleMesh>SurfaceModel.obj</TriangleMesh>
                 <TrackingConfiguration>InitialPose.xml</TrackingConfiguration>
                 <UseSensorsForPoseCreation>off</UseSensorsForPoseCreation>
                 <InitializationTestMode>false</InitializationTestMode>
                 <AutoInit>
-                    <PresetType>outdoor</PresetType>
+                    <PresetType>off</PresetType>
                 </AutoInit>
                 <EdgeAlignment>
                     <LineModel>LineModel.obj</LineModel>
                     <MinQuality>0.55</MinQuality>
-                    <NumFeatures>280</NumFeatures>
+                    <VisibilityTest>
+                        <TestRate>0.1000000015</TestRate>
+                        <Enabled>false</Enabled>
+                    </VisibilityTest>
+                    <NumFeatures>80</NumFeatures>
                 </EdgeAlignment>
                 <FeatureTracking>
                     <Parameters>
@@ -25,26 +29,26 @@
                 </FeatureTracking>
             </Parameters>
             <SensorCOS>
-                <SensorCosID>TrackingPosePanneau</SensorCosID>
+                <SensorCosID>TrackingPose</SensorCosID>
             </SensorCOS>
             <SensorCOS>
-                <SensorCosID>InitialPosePanneau</SensorCosID>
+                <SensorCosID>InitialPose</SensorCosID>
             </SensorCOS>
         </Sensor>
     </Sensors>
     <Connections>
         <COS>
-            <Name>TrackingPosePanneau</Name>
+            <Name>TrackingPose</Name>
             <SensorSource>
-                <SensorID>PanneauCAD</SensorID>
-                <SensorCosID>TrackingPosePanneau</SensorCosID>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>TrackingPose</SensorCosID>
             </SensorSource>
         </COS>
         <COS>
-            <Name>InitialPosePanneau</Name>
+            <Name>InitialPose</Name>
             <SensorSource>
-                <SensorID>PanneauCAD</SensorID>
-                <SensorCosID>InitialPosePanneau</SensorCosID>
+                <SensorID>EdgeBasedInitializationSensorSource_0</SensorID>
+                <SensorCosID>InitialPose</SensorCosID>
             </SensorSource>
         </COS>
     </Connections>

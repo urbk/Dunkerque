@@ -1,9 +1,15 @@
 package com.urbik.dunkerque;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.MotionEventCompat;
@@ -16,6 +22,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -35,6 +42,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import utils.BackgroundVideoTask;
+import utils.FastBlur;
 import utils.Utils;
 import wifiConnect.AsyncWifiConnect;
 import wifiConnect.ContentLoader;
@@ -51,8 +59,10 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
     private final Vector3d v3d = new Vector3d(0.0f, 0.0f, 0.0f);
     private Animation animBounce, animFadeIn, animFadeOut;
     private LinearLayout contentL;
-    private ImageButton leftArrow,rightArrow, cadReset, mImageButton = null;
+    private ImageButton leftArrow, rightArrow, cadReset, mImageButton = null, guide,ib;
     private float fingerX, fingerY;
+    String connectivity_context = Context.WIFI_SERVICE;
+    ImageView iv;
 
     private enum EState {
         NOTTRACKING,
@@ -77,13 +87,28 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         mGUIView.setOnLongClickListener(this);
         PATH_TO_IMAGE_TRACKING_CONF = AssetsManager.getAbsolutePath() + "/Img/TrackingData_MarkerlessFast.xml";
         PATH_TO_CAD_TRACKING_CONF = "";
-        animBounce = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.bounce);
-        animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fade_in);
-        animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fade_out);
+        animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+        animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+        final WifiManager wifi = (WifiManager) getSystemService(connectivity_context);
 
+        registerReceiver(new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                WifiInfo info = wifi.getConnectionInfo();
+                iv = (ImageView) findViewById(R.id.lost_connexion);
+                 ib = (ImageButton) findViewById(R.id.retry_co);
+//           RSSI BETWEEN 0 (max) & -120 (min)
+                if (info.getRssi() <= AsyncWifiConnect.RSSI_STRENGH_REQUIRED) {
+                    Toast.makeText(getApplicationContext(), info.getRssi() + " Trop faible", Toast.LENGTH_SHORT).show();
+                    iv.setVisibility(View.VISIBLE);
+                    ib.setVisibility(View.VISIBLE);
+                }
+                unregisterReceiver(this);
+            }
+
+        }, new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
 
     }
 
@@ -112,8 +137,9 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         super.onDestroy();
         mCallbackHandler.delete();
         mCallbackHandler = null;
-        File contentFolder = new File(ContentLoader.ROOT_INTERNAL);
-        Utils.deleteDir(contentFolder);
+
+        WifiManager mWifimanager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        mWifimanager.setWifiEnabled(false);
     }
 
     @Override
@@ -124,8 +150,13 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 mTrack = TrackState.NOGPS;
                 mState = EState.NOTTRACKING;
                 cadReset.setVisibility(View.GONE);
+                if (currentTargetName.substring(0, 9).equals("Sandettie") && !currentTargetName.substring(9).equals("-Img")) {
+                    leftArrow.setVisibility(View.GONE);
+                    rightArrow.setVisibility(View.GONE);
+                    guide.setVisibility(View.VISIBLE);
+                }
                 new LoadTrackingConfig(this, metaioSDK).execute(PATH_TO_IMAGE_TRACKING_CONF);
-            } else if (currentTargetName.equals("Sandettie-Img") && mState == EState.TRACKING) {
+            } else if (currentTargetName.equals(EnumModel.SANDETTIE_IMG.toString()) && mState == EState.TRACKING) {
                 for (Map.Entry<String, EnumModel> entry : trackingModel.entrySet()) {
                     entry.getValue().getModel().getIGeometry().setVisible(false);
                 }
@@ -137,7 +168,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
 
     @Override
     public boolean onLongClick(View v) {
-        if (currentTargetName.equals("Duchesse-Img") && mState == EState.TRACKING) {
+        if (currentTargetName.equals(EnumModel.DUCHESSE_IMG.toString()) && mState == EState.TRACKING) {
             mImageButton = (ImageButton) findViewById(R.id.rotateModel);
 
             float xOffset = 42;
@@ -261,16 +292,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
         contentGestion(ct, vv, mMediaPlayer);
         vv = (VideoView) findViewById(R.id.videoview);
         vv.setVisibility(View.VISIBLE);
-//        mMediaPlayer.reset();
         new BackgroundVideoTask(this, vv).execute(AssetsManager.getAbsolutePath() + "/sandettie.mp4");
-//        vv.setVideoURI(Uri.parse("http://"+AsyncWifiConnect.getIpAdress()+"www/"+fileName)); // AssetsManager.getAbsolutePath()+"/sandettie.3gp"
-//        vv.requestFocus();
-//        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            public void onPrepared(MediaPlayer arg0) {
-//              vv.start();
-//            }
-//        });
-
     }
 
     //when sound is ready to be streamed we can start it
@@ -310,7 +332,7 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 currentModel.getIGeometry().setVisible(false);
                 mTrack = TrackState.CAD;
                 cadReset = (ImageButton) findViewById(R.id.resetCad);
-                leftArrow= (ImageButton) findViewById(R.id.arrow_left);
+                leftArrow = (ImageButton) findViewById(R.id.arrow_left);
                 rightArrow = (ImageButton) findViewById(R.id.arrow_right);
                 cadReset.setVisibility(View.VISIBLE);
                 leftArrow.setVisibility(View.VISIBLE);
@@ -318,9 +340,10 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 for (Map.Entry<String, EnumModel> entry : trackingModel.entrySet()) {
                     entry.getValue().getModel().getIGeometry().setVisible(false);
                 }
-                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_1.toString(), EnumModel.SANDETTIE_CAD_VISUAL_HELP.toString(), PATH_TO_CAD_TRACKING_CONF, true);
-                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_2.toString(), EnumModel.SANDETTIE_CAD_VISUAL_HELP.toString(), PATH_TO_CAD_TRACKING_CONF, false);
-                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_3.toString(), EnumModel.SANDETTIE_CAD_VISUAL_HELP.toString(), PATH_TO_CAD_TRACKING_CONF, false);
+                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_1, EnumModel.SANDETTIE_CAD_VISUAL_HELP, PATH_TO_CAD_TRACKING_CONF, true);
+                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_2, EnumModel.SANDETTIE_CAD_VISUAL_HELP, PATH_TO_CAD_TRACKING_CONF, false);
+                manageCadTracking(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_3, EnumModel.SANDETTIE_CAD_VISUAL_HELP, PATH_TO_CAD_TRACKING_CONF, false);
+                guide.setVisibility(View.GONE);
                 break;
             case R.id.guide:
                 PATH_TO_CAD_TRACKING_CONF = AssetsManager.getAbsolutePath() + "/CAD/Panneau/Tracking.xml";
@@ -328,21 +351,33 @@ public class Tracking extends ARViewActivity implements MediaPlayer.OnPreparedLi
                 mTrack = TrackState.CAD;
                 cadReset = (ImageButton) findViewById(com.urbik.dunkerque.R.id.resetCad);
                 cadReset.setVisibility(View.VISIBLE);
-                manageCadTracking(trackingModel, EnumModel.PANNEAU_CAD_DISPLAY_MODEL.toString(), EnumModel.PANNEAU_CAD_VISUAL_HELP.toString(), PATH_TO_CAD_TRACKING_CONF, true);
+                for (Map.Entry<String, EnumModel> entry : trackingModel.entrySet()) {
+                    entry.getValue().getModel().getIGeometry().setVisible(false);
+                }
+                manageCadTracking(trackingModel, EnumModel.PANNEAU_CAD_DISPLAY_MODEL, EnumModel.PANNEAU_CAD_VISUAL_HELP, PATH_TO_CAD_TRACKING_CONF, true);
 
                 break;
             case R.id.resetCad:
                 metaioSDK.setTrackingConfiguration(PATH_TO_CAD_TRACKING_CONF);
                 break;
             case R.id.arrow_left:
-                onSwitchDisplayedModel(trackingModel, "Sandettie-CAD-D-1", 3, false);
+                onSwitchDisplayedModel(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_1, 3, false);
                 break;
             case R.id.arrow_right:
-                onSwitchDisplayedModel(trackingModel, "Sandettie-CAD-D-1", 3, true);
+                onSwitchDisplayedModel(trackingModel, EnumModel.SANDETTIE_CAD_DISPLAY_MODEL_1, 3, true);
+                break;
+            case R.id.retry_co:
+                WifiManager mWifimanager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                mWifimanager.setWifiEnabled(false);
+                ib.setVisibility(View.GONE);
+                iv.setVisibility(View.GONE);
+                startActivity(new Intent(this, Configuration.class));
+                finish();
                 break;
         }
 
     }
+
 
     //******************************************************************************************************
 //    ********************************************METAIO****************************************************
@@ -401,6 +436,8 @@ Architecture of Key String : Name of marker + - + Type of Tracking + - + Type of
                 @Override
                 public void run() {
                     mGUIView.setVisibility(View.VISIBLE);
+                    guide = (ImageButton) findViewById(R.id.guide);
+                    guide.setVisibility(View.VISIBLE);
                 }
             });
         }

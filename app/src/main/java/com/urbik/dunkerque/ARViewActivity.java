@@ -482,21 +482,21 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
 
     }
 
-    void manageCadTracking(Map<String, EnumModel> trackingModel, String TrackingDisplayModel, String TrackingVisualModel, String pathToTrackConf, boolean isVisible) {
+    void manageCadTracking(Map<String, EnumModel> trackingModel, EnumModel TrackingDisplayModel, EnumModel TrackingVisualModel, String pathToTrackConf, boolean isVisible) {
         metaioSDK.setTrackingConfiguration(pathToTrackConf);
         for (Map.Entry<String, EnumModel> entry : trackingModel.entrySet()) {
-            if (entry.getKey().equals(TrackingDisplayModel)) {
+            if (entry.getKey().equals(TrackingDisplayModel.toString())) {
                 entry.getValue().getModel().getIGeometry().setVisible(isVisible);
                 entry.getValue().getModel().getIGeometry().setCoordinateSystemID(entry.getValue().getModel().getModelCsi());
-            } else if (entry.getKey().equals(TrackingVisualModel)) {
+            } else if (entry.getKey().equals(TrackingVisualModel.toString())) {
                 entry.getValue().getModel().getIGeometry().setVisible(true);
                 entry.getValue().getModel().getIGeometry().setCoordinateSystemID(entry.getValue().getModel().getModelCsi());
             }
         }
     }
 
-    public boolean onSwitchDisplayedModel(Map<String, EnumModel> m, String id, int numberOfModel, boolean right) {
-        String[] subS = id.split("-");
+    public boolean onSwitchDisplayedModel(Map<String, EnumModel> m, EnumModel id, int numberOfModel, boolean right) {
+        String[] subS = id.toString().split("-");
 
         boolean found = false;
         if (subS[2].equals("D")) {
@@ -509,24 +509,24 @@ public abstract class ARViewActivity extends FragmentActivity implements MetaioS
                     if (currentNumber == numberOfModel) {
                         entry.getValue().getModel().getIGeometry().setVisible(false);
                         if (right) {
-                            m.get(id.substring(0, id.length() - 1) + "1").getModel().getIGeometry().setVisible(true);
+                            m.get(id.toString().substring(0, id.toString().length() - 1) + "1").getModel().getIGeometry().setVisible(true);
                         } else {
-                            m.get(id.substring(0, id.length() - 1) + (String.valueOf(numberOfModel - 1))).getModel().getIGeometry().setVisible(true);
+                            m.get(id.toString().substring(0, id.toString().length() - 1) + (String.valueOf(numberOfModel - 1))).getModel().getIGeometry().setVisible(true);
                         }
                     } else {
                         entry.getValue().getModel().getIGeometry().setVisible(false);
                         if (currentNumber == 1) {
                             if (right) {
-                                m.get(id.substring(0, id.length() - 1) + "2").getModel().getIGeometry().setVisible(true);
+                                m.get(id.toString().substring(0, id.toString().length() - 1) + "2").getModel().getIGeometry().setVisible(true);
                             } else {
-                                m.get(id.substring(0, id.length() - 1) + String.valueOf(numberOfModel)).getModel().getIGeometry().setVisible(true);
+                                m.get(id.toString().substring(0, id.toString().length() - 1) + String.valueOf(numberOfModel)).getModel().getIGeometry().setVisible(true);
                             }
                         } else {
 
                             if (right) {
-                                m.get(id.substring(0, id.length() - 1) + (String.valueOf(currentNumber + 1))).getModel().getIGeometry().setVisible(true);
+                                m.get(id.toString().substring(0, id.toString().length() - 1) + (String.valueOf(currentNumber + 1))).getModel().getIGeometry().setVisible(true);
                             } else {
-                                m.get(id.substring(0, id.length() - 1) + (String.valueOf(currentNumber - 1))).getModel().getIGeometry().setVisible(true);
+                                m.get(id.toString().substring(0, id.toString().length() - 1) + (String.valueOf(currentNumber - 1))).getModel().getIGeometry().setVisible(true);
                             }
                         }
                     }

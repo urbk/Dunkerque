@@ -82,7 +82,6 @@ public class ContentLoader extends AsyncTask<String, Integer, Integer> {
 //        mContext.overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 
     }
-
     void downloadFromUrl(String downloadUrl, String fileName, String folder) {
         try {
             URL url = new URL("http://" + downloadUrl + "/" + folder + "/" + fileName);

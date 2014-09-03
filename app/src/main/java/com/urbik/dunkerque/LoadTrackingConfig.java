@@ -23,6 +23,8 @@ public class LoadTrackingConfig extends AsyncTask<String, Void,Boolean> {
 
     protected void onPreExecute() {
         progress = new ProgressDialog(mArView);
+        progress.setMessage("Patientez...");
+       progress.setProgressStyle(android.R.attr.progressBarStyleSmall);
         progress.show();
     }
 
